@@ -22,6 +22,9 @@ const connect = async () => {
   }
 }
 
+app.use(express.json())
+
+
 app.use("/api/auth", authRoute)
 app.use("/api/users", userRoute)
 app.use("/api/orders", orderRoute)
@@ -30,7 +33,6 @@ app.use("/api/gigs", gigRoute)
 app.use("/api/messages", gigRoute)
 app.use("/api/conversations", conversationRoute)
 
-app.use(express.json())
 
 app.listen(8800, () => {
   connect()
