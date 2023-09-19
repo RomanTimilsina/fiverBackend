@@ -8,6 +8,7 @@ import orderRoute from "./routes/order.route.js"
 import messageRoute from "./routes/message.route.js"
 import conversationRoute from "./routes/conversation.route.js"
 import authRoute from "./routes/auth.route.js"
+import cookieParser from "cookie-parser"
 
 const app = express()
 dotenv.config()
@@ -23,14 +24,14 @@ const connect = async () => {
 }
 
 app.use(express.json())
-
+app.use(cookieParser())
 
 app.use("/api/auth", authRoute)
 app.use("/api/users", userRoute)
 app.use("/api/orders", orderRoute)
 app.use("/api/reviews", reviewRoute)
 app.use("/api/gigs", gigRoute)
-app.use("/api/messages", gigRoute)
+app.use("/api/messages", messageRoute)
 app.use("/api/conversations", conversationRoute)
 
 
