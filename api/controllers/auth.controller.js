@@ -16,7 +16,7 @@ export const registerUser = async (req, res, next) => {
     const newUser = User({
       ...req.body,
       password: hash,
-      img: registrationId,
+      img: req.body.img+'-'+`${registrationId}.png`,
     })
  
     await newUser.save()
