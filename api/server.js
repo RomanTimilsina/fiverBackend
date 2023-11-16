@@ -10,6 +10,7 @@ import conversationRoute from "./routes/conversation.route.js"
 import authRoute from "./routes/auth.route.js"
 import cookieParser from "cookie-parser"
 import cors from "cors"
+import upload from './utils/multerConfig.js';
 
 const app = express()
 dotenv.config()
@@ -24,9 +25,16 @@ const connect = async () => {
   }
 }
 
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
 app.use(cookieParser())
 app.use(cors({origin: "http://127.0.0.1:5173", credentials: true}))
+
+app.post('/upload', upload.single('file'), (req, res) => {
+const imageName = registrationId
+console.log(`nameServer:${registrationId}`)
+}
+)
 
 app.use("/api/auth", authRoute)
 app.use("/api/users", userRoute)

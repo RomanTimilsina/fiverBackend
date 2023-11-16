@@ -3,18 +3,24 @@ import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import createError from "../utils/CreateError.js"
 
+export let registrationId;
+
 export const registerUser = async (req, res, next) => {
   //TODO
+  const date = new Date()
 
+  registrationId =  Date.now() + '-' + Math.round(Math.random() * 1E9)
   try{
     const hash = bcrypt.hashSync(req.body.password, 5)
+    console.log(req.body)
     const newUser = User({
       ...req.body,
       password: hash,
+      img: registrationId,
     })
  
     await newUser.save()
-    res.status(201).send("User has been created.")
+    res.status(201).json({message:"User has been created.", registrationId})
   } catch(err) {
     next(err)
   }
