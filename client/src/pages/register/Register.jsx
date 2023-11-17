@@ -43,7 +43,7 @@ function Register() {
 
       await upload(file);
 
-      // navigate("/")
+      navigate("/")
     } catch (err) {
       console.log(err);
     }
