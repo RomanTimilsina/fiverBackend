@@ -17,7 +17,6 @@ export const createGig = async (req, res, next) => {
   }
 }
 
-
 export const deleteGig = async (req, res, next) => {
 
 }
