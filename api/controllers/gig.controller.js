@@ -19,11 +19,31 @@ export const createGig = async (req, res, next) => {
 
 export const deleteGig = async (req, res, next) => {
   try {
+    const gig = await Gig.findById(req.params.id);
 
-  } catch(err) {
-    next(err)
+    console.log('Retrieved gig:', gig);
+
+    if (!gig) {
+      console.log('Gig not found.');
+      return next(createError(404, "Gig not found."));
+    }
+
+    if (gig.userId !== req.userId) {
+      console.log(`usersId:${req.userId}`)
+      console.log(`gigsUserId:${gig.userId}`)
+
+      console.log('User does not have permission to delete this gig.');
+      return next(createError(403, "You can delete only your own gig!"));
+    }
+
+    await Gig.findByIdAndDelete(req.params.id);
+    res.status(200).send("Gig deleted.");
+  } catch (err) {
+    console.error('Error deleting gig:', err);
+    next(err);
   }
-}
+};
+
 
 export const getGig = async (req, res, next) => {
   try {
@@ -40,3 +60,6 @@ export const getGigs = async (req, res, next) => {
     next(err)
   }
 }
+
+
+

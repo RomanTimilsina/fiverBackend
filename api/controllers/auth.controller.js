@@ -7,7 +7,7 @@ export let registrationId;
 
 export const registerUser = async (req, res, next) => {
   //TODO
-  const date = new Date()
+  const date = new Date() 
 
   registrationId =  Date.now() + '-' + Math.round(Math.random() * 1E9)
   try{
