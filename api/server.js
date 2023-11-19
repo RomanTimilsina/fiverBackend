@@ -36,6 +36,7 @@ console.log(`nameServer:${registrationId}`)
 }
 )
 
+app.use('/api/uploads', express.static('uploads'));
 app.use("/api/auth", authRoute)
 app.use("/api/users", userRoute)
 app.use("/api/orders", orderRoute)
