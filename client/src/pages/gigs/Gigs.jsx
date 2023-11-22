@@ -25,9 +25,6 @@ function Gigs() {
   })
 )
 
-console.log(data)
-
-
   const apply = ()=>{
     refetch()
   }
