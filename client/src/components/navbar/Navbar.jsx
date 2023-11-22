@@ -6,6 +6,7 @@ import newRequest from "../../utils/newRequest";
 function Navbar() {
   const [active, setActive] = useState(false);
   const [open, setOpen] = useState(false);
+  const [imageSrc, setImageSrc] = useState('');
 
   const navigate = useNavigate()
 
@@ -15,14 +16,29 @@ function Navbar() {
     window.scrollY > 0 ? setActive(true) : setActive(false);
   };
 
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"))
+
+  // used for image download
+  useEffect(() => {
+    const downloadImage = () => {
+      fetch(`http://localhost:8800/api/uploads/${currentUser.img}`)
+        .then((response) => response.blob())
+        .then((blob) => {
+          const imageUrl = URL.createObjectURL(blob);
+          setImageSrc(imageUrl);
+        })
+        .catch((error) => console.error('Error fetching image:', error));
+    };
+  
+    downloadImage();
+  }, []);
+  
   useEffect(() => {
     window.addEventListener("scroll", isActive);
     return () => {
       window.removeEventListener("scroll", isActive);
     };
   }, []);
-
-  const currentUser = JSON.parse(localStorage.getItem("currentUser"))
 
   const handleLogout = async () => {
     try { 
@@ -53,9 +69,10 @@ function Navbar() {
           {currentUser ? (
             <div className="user" onClick={()=>setOpen(!open)}>
               <img
-                src= {currentUser.img || "/img/man.png"}
+                src= {imageSrc}
                 alt=""
               />
+
               <span>{currentUser?.username}</span>
               {open && <div className="options">
                 {currentUser.isSeller && (
@@ -81,7 +98,7 @@ function Navbar() {
             </div>
           ) : (
             <>
-              <span>Sign in</span>
+              <Link to="/login" className="link">Sign in</Link>
               <Link className="link" to="/register">
                 <button>Join</button>
               </Link>
