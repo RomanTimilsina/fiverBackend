@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./Gigs.scss";
 // import { gigs } from "../../data";
 import GigCard from "../../components/gigCard/GigCard";
@@ -11,6 +11,8 @@ function Gigs() {
   const [open, setOpen] = useState(false);
   const minRef = useRef();
   const maxRef = useRef();
+  const [fileData, setFileData] = useState([]);
+
 
   const location = useLocation()
 
@@ -20,17 +22,20 @@ function Gigs() {
   };
 
   const { isLoading, error, data, refetch } = useQuery('repoData', () =>
-  newRequest.get(`/gigs${location.search}&min=${minRef.current.value}&max=${maxRef.current.value}`).then((res) => {
+  newRequest.get(`/gigs${location.search}&min=${minRef.current.value}&max=${maxRef.current.value}&sort=${sort}`).then((res) => {
     return res.data;
   })
 )
 
 console.log(data)
 
-
   const apply = ()=>{
     refetch()
   }
+
+  useEffect(() => {
+    refetch()
+  }, [sort])
 
   return (
     <div className="gigs">
@@ -69,9 +74,9 @@ console.log(data)
                   {isLoading ? "loading" :
             error ? "error" :
             data.map((gig) => (
-              <React.Fragment key={gig._id}>
-                <GigCard item={gig} />
-                {console.log("data:",gig)}
+
+              <React.Fragment key={gig._id} >
+                <GigCard item={gig}/>
               </React.Fragment>
             ))
           }
