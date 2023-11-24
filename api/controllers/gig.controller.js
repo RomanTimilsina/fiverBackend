@@ -69,7 +69,7 @@ export const getGigs = async (req, res, next) => {
   }
 
   try {
-    const gigs = await Gig.find(filter)
+    const gigs = await Gig.find(filter).sort({[q.sort]: -1})
 
     if (!gigs) return next(createError(404, "Gig not found!"))
 
