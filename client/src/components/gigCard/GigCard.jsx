@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from "react";
 import "./GigCard.scss";
 import { Link } from "react-router-dom";
+import { useQuery } from "react-query";
+import newRequest from "../../utils/newRequest";
 
 const GigCard = ({ item }) => {
   const [imageSrc, setImageSrc] = useState('');
+  const [userImg, setUserImg] = useState('');
 
-  console.log(item.cover)
+  const { isLoading, error, data } = useQuery(`${item.userId}`, () =>
+  newRequest.get(`/users/${item.userId}`).then((res) => {
+    return res.data;
+  })
+)
+
   useEffect(() => {
     const downloadImage = () => {
       fetch(`http://localhost:8800/api/uploads/${item.cover}`)
@@ -20,19 +28,50 @@ const GigCard = ({ item }) => {
     downloadImage();
   }, [item]);
 
+  useEffect(() => {
+    if (!isLoading) {
+      const downloadImage = () => {
+        fetch(`http://localhost:8800/api/uploads/${data.img}`)
+          .then((response) => response.blob())
+          .then((blob) => {
+            const imageUrl = URL.createObjectURL(blob);
+            console.log(data.userId)
+            setUserImg(imageUrl);
+            console.log("UserID")
+          })
+          .catch((error) => console.error('Error fetching image:', error));
+      };
+  
+      downloadImage();
+    }
+
+    
+  }, [data, isLoading]);
+
+  console.log(item)
+
   return (
-    <Link to="/gig/123" className="link">
+    <Link to={`/gig/${item._id}`} className="link">
       <div className="gigCard">
         <img src={imageSrc} alt="" />
         <div className="info">
-          <div className="user">
-            <img src={item.pp} alt="" />
-            <span>{item.username}</span>
-          </div>
+          
+          { isLoading ? "loading" :  error ? "error" : 
+          (<div className="user">
+            <img src={data ? userImg : "man.png"} alt="" />
+            <span>{data && data.username}</span>
+            </div>
+            )
+          }
+
           <p>{item.desc}</p>
           <div className="star">
             <img src="./img/star.png" alt="" />
-            <span>{item.star}</span>
+            <span>
+              {
+              !isNaN(item.totalStars / item.starNumber) && Math.round(item.totalStars / item.starNumber)
+            }
+            </span>
           </div>
         </div>
         <hr />
@@ -42,7 +81,6 @@ const GigCard = ({ item }) => {
             <span>STARTING AT</span>
             <h2>
               $ {item.price}
-              <sup>99</sup>
             </h2>
           </div>
         </div>

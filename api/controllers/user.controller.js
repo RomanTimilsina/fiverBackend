@@ -12,9 +12,11 @@ export const deleteUser = async (req,res) => {
     next(createError(403, "deleted"))
 }
 
-export const fn = (req,res) => {
-  //TODO
-  res.send("from controller")
+
+export const getUser = async (req,res) => {
+  const user = await User.findById(req.params.id)
+
+    res.status(200).send(user)
 }
 
 export const fnn = (req,res) => {

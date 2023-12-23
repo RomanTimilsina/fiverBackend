@@ -49,8 +49,8 @@ export const getGig = async (req, res, next) => {
   try {
     const gig = await Gig.findById(req.params.id)
 
-    if (!gig) return next(createError(403, "No such gigs!"))
-
+    if (!gig) return next(createError(404, "No such gigs!"))
+    console.log(gig)
     res.status(200).send(gig)
   } catch(err) {
     next(err)
@@ -58,9 +58,7 @@ export const getGig = async (req, res, next) => {
 }
 
 export const getGigs = async (req, res, next) => {
-
   const q = req.query
-  
   const filter = {
     ...(q.userId && {userId:q.userId}),
     ...(q.cat && {cat:q.cat}),

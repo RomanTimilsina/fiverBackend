@@ -13,16 +13,18 @@ function Gigs() {
   const maxRef = useRef();
   const [fileData, setFileData] = useState([]);
 
-
-  const location = useLocation()
+  const { search } = useLocation();
 
   const reSort = (type) => {
     setSort(type);
     setOpen(false);
   };
 
-  const { isLoading, error, data, refetch } = useQuery('repoData', () =>
-  newRequest.get(`/gigs${location.search}&min=${minRef.current.value}&max=${maxRef.current.value}&sort=${sort}`).then((res) => {
+  const { isLoading, error, data, refetch } = useQuery('gigs', () =>
+  newRequest.get(
+    `/gigs${search}${search ? "&" : "?"}min=${minRef.current.value}&max=${maxRef.current.value}&sort=${sort}` 
+  )
+  .then((res) => {
     return res.data;
   })
 )
@@ -40,7 +42,7 @@ console.log(data)
   return (
     <div className="gigs">
       <div className="container">
-        <span className="breadcrumbs">`Liverr {'>'} Graphics & Design {'>'}`</span>
+      <span className="breadcrumbs">Liverr {'>'} Graphics & Design {'>'}</span>
         <h1>AI Artists</h1>
         <p>
           Explore the boundaries of art and technology with Liverr's AI artists
