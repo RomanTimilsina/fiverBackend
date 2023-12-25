@@ -15,14 +15,12 @@ function Gig() {
   // },[])
 
   const { id } = useParams()
-  console.log("id:",id)
 
   const { isLoading, error, data } = useQuery('gig', () =>
   newRequest.get(
     `gigs/single/${id}` 
   )
   .then((res) => {
-    console.log("data is here:",res.data)
 
     setImgArray(res.data.images)
     return res.data;
