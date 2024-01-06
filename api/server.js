@@ -11,10 +11,15 @@ import authRoute from "./routes/auth.route.js"
 import cookieParser from "cookie-parser"
 import cors from "cors"
 import upload from './utils/multerConfig.js';
+import bodyParser from 'body-parser';
+
 
 const app = express()
 dotenv.config()
 mongoose.set('strictQuery',true)
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 const connect = async () => {
   try {
